@@ -1,0 +1,36 @@
+# Base Config File
+
+idx_path: '/data/user_data/jingyuah/spann_idx/base_idx'
+inf_path:  '/home/jingyuah/spann_build/stats/spann_base_idx.txt'
+NumberOfThreads: 64
+Algo: "BKT"
+distM: "Cosine"
+
+
+SelectHead: 
+  BKTKmeansK: 32
+  BKTLeafSize: 8
+  SamplesNumber: 10000
+  SelectThreshold: 50
+  SplitThreshold: 100
+  Ratio: 0.1
+
+BuildHead: 
+  TPTNumber: 64 # default 32
+  TPTLeafSize: 2000
+  MaxCheck: 8192 # default 4096
+  MaxCheckForRefineGraph: 8192 # default 8192
+  NeighborhoodSize: 32
+
+BuildSSDIndex: 
+  PostingPageLimit: 96 # default 12
+  MaxCheck: 8192 # default 4092
+  MaxDistRatio: 1000.0
+  SearchInternalResultNum: 64
+  SearchPostingPageLimit: 96
+
+SearchIndex: 
+  MaxCheck: 8192 # default 4092 
+  SearchPostingPageLimit: 96
+  SearchInternalResultNum: 64
+  MaxDistRatio: 1200.0 # was 1000.0 , this is just for search param check # default 8.0
