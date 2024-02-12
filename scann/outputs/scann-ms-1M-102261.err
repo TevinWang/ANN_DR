@@ -1,5 +1,0 @@
-2024-01-16 20:39:40.256628: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
-To enable the following instructions: AVX2 AVX512F FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
-2024-01-16 20:39:41.484028: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
-2024-01-16 20:39:43.969165: I scann/partitioning/partitioner_factory_base.cc:59] Size of sampled dataset for training partition: 249544
-2024-01-16 20:41:21.165970: I ./scann/partitioning/kmeans_tree_partitioner_utils.h:84] PartitionerFactory ran in 1m37.196625713s.

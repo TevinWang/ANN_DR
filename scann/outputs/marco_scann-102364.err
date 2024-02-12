@@ -1,8 +1,0 @@
-mkdir: cannot create directory ‘/ANN/ann_index/marco_scann’: File exists
-2024-01-16 23:15:24.633571: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
-To enable the following instructions: AVX2 AVX512F FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
-2024-01-16 23:15:26.197749: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
-2024-01-16 23:16:26.918144: I scann/partitioning/partitioner_factory_base.cc:59] Size of sampled dataset for training partition: 499463
-2024-01-16 23:36:11.442595: I ./scann/partitioning/kmeans_tree_partitioner_utils.h:84] PartitionerFactory ran in 19m44.524012251s.
-/var/spool/slurmd/job102364/slurm_script: line 40: 270452 Killed                  python build.py --data /data/user_data/jingyuah/sparse_disk/doc_embed/marco_vectors.bin --query /data/user_data/jingyuah/sparse_disk/doc_embed/marco_queries.bin --gt /data/user_data/jingyuah/sparse_disk/doc_embed/gt.bin --index_path $tgt_dir --num_leaves 30000 --train_size 500000 --num_leaves_to_search 20000 --K 100 --pre_reorder_num_neighbors 50000 --search_only False
-slurmstepd: error: Detected 1 oom-kill event(s) in StepId=102364.batch cgroup. Some of your processes may have been killed by the cgroup out-of-memory handler.

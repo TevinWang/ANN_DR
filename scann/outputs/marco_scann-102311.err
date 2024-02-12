@@ -1,7 +1,0 @@
-2024-01-16 21:19:03.333135: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
-To enable the following instructions: AVX2 AVX512F FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
-2024-01-16 21:19:04.739941: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
-2024-01-16 21:20:13.639037: I scann/partitioning/partitioner_factory_base.cc:59] Size of sampled dataset for training partition: 499463
-2024-01-16 21:40:02.125737: I ./scann/partitioning/kmeans_tree_partitioner_utils.h:84] PartitionerFactory ran in 19m48.486294575s.
-/var/spool/slurmd/job102311/slurm_script: line 40: 269705 Killed                  python build.py --data /data/user_data/jingyuah/sparse_disk/doc_embed/marco_vectors.bin --query /data/user_data/jingyuah/sparse_disk/doc_embed/marco_queries.bin --gt /data/user_data/jingyuah/sparse_disk/doc_embed/gt.bin --index_path $tgt_dir --num_leaves 30000 --train_size 500000 --num_leaves_to_search 20000 --K 100 --pre_reorder_num_neighbors 50000 --search_only False
-slurmstepd: error: Detected 1 oom-kill event(s) in StepId=102311.batch cgroup. Some of your processes may have been killed by the cgroup out-of-memory handler.
