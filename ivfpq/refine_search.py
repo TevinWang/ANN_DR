@@ -57,50 +57,27 @@ def knn_result_read(fname):
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--index_name")
+parser.add_argument("--index_dir")
+parser.add_argument("--embed_path")
+parser.add_argument("--query_path")
+parser.add_argument("--gt_path")
+parser.add_argument("--stats_path")
 parser.add_argument("--efSearch", default=200)
 parser.add_argument("--nprobes", default=1200)
+parser.add_argument("--refine_frac", default=5)
 args = parser.parse_args()
 
+# print configs
+print(f'--- --- \n searching {args.index_name} \n \
+    with queries at {args.query_path} \n \
+    against gt at {args.gt_path} \n \
+    and output to {args.stats_path} \n --- ---')
 
 
-
-# ############ MSMARCO 
-# print("-------- parsing queries---------------")
-# # parse queries
-# name = '/data/group_data/cx_group/efficient-dr/embeddings/embeddings.query.rank.'
-# for i in range(8): # 0-7
-#     fname = name + str(i)
-#     with open(fname, "rb") as fTruth:
-#         encs = pickle.load(fTruth)
-#     if i == 0:
-#         queries = encs[0]
-#         q_ids = encs[1]
-#     else:
-#         queries = np.concatenate((queries, encs[0]))
-#         q_ids = np.concatenate((q_ids, encs[1]))
-
-# # queries = augment_q(queries) # augment to 769d
-
-
-# print("-------- retrieved ground truth documents ---------------")
-# # retrieved documents of T5 ANCE
-# rname = '/data/group_data/cx_group/efficient-dr/retrieved.train.trec'
-# retrieved = {}
-# for line in fileinput.input([rname]):
-#     ids = line.split(' ')
-#     if ids[0] not in retrieved.keys():
-#         retrieved[ids[0]] = [[int(ids[2]), int(ids[3])]] # q_id: [d_id, rank]
-#     else:
-#         retrieved[ids[0]].append([int(ids[2]), int(ids[3])])
-# # need to exclude those with less than 100 documents when doing recall
-# queries_id = retrieved.keys() 
-
-
-
-# ################## MSTuring 
+# ################## LOADING 
 
 print("------------------- Load Embeddings -----------------")
-name = '/home/jingyuah/big-ann-benchmarks/data/msturing-1M/base1b.fbin.crop_nb_1000000'
+name = args.embed_path
 embeds = read_fbin(name)
 print("embedding shape: ", embeds.shape)
 vector_num = embeds.shape[0]
@@ -115,8 +92,8 @@ sys.stdout.flush()
 vector_dim = embeds.shape[1]
 
 
-query_name = '/home/jingyuah/big-ann-benchmarks/data/msturing-1M/query100K.fbin'
-gt_name = '/home/jingyuah/big-ann-benchmarks/data/msturing-1M/msturing-gt-1M'
+query_name = args.query_path
+gt_name = args.gt_path
 
 queries = read_fbin(query_name)
 
@@ -127,26 +104,18 @@ I_gt, D_gt = knn_result_read(gt_name)
 
 
 print("---------------load index------------------")
-dest_dir = '/data/user_data/jingyuah/faiss/ivfpq'
+dest_dir = args.index_dir
 index_name = args.index_name
-### index
-index_name = 'ivfpq_m25_nlist_4800'
 output_name = f'{index_name}.bin'
-######
-# index_name = 'ivfpq_aug'
-# output_name = f'ivfpq_m{m}_nlist_{nlist}.bin'
 index_file = os.path.join(dest_dir, output_name) 
 print("loading: ", index_file)
 index = read_index(index_file)
 
-index.efSearch = args.efSearch
-index.nprobe = 1200 # args.nprobes
+index.efSearch = int(args.efSearch)
+index.nprobe = int(args.nprobes)
 
-# index.nprobe = 320 # 1200  # slower -> postinglist = 10
 
 refine_index = faiss.IndexFlatL2(vector_dim)
-
-
 
 K = [10, 100]
 search_num = queries.shape[0] # search all queries 
@@ -161,7 +130,7 @@ for k in K:
     
     start_time = time.time()
     
-    D_c, I_c = index.search(queries[:search_num], 5*k) # I = nq * k
+    D_c, I_c = index.search(queries[:search_num], int(args.refine_frac)*k) # I = nq * k
     print("retrieved.shape: ", I_c.shape) ##
     
     end_time = time.time()   
@@ -182,6 +151,8 @@ for k in K:
         I_r = []
         for idx in range(I_nr.shape[1]):
             I_r.append(map[I_nr[0][idx]])
+            
+        # just a progress check    
         if i % 1000 == 0:
             print(f"{i}th reranked retrieved len: {len(I_r)}")
     
@@ -203,7 +174,7 @@ for k in K:
 print(recall_stats)
 print(time_stats)
 
-with open(f'/home/jingyuah/benchmarks/faiss_ivfpq/refined_{index_name}_2.txt', 'w') as convert_file: 
+with open(args.stats_path, 'w') as convert_file: 
      convert_file.write(json.dumps(recall_stats))
      convert_file.write(json.dumps(time_stats))
      convert_file.write(json.dumps(qps))

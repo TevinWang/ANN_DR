@@ -1,0 +1,16 @@
+ScaNN Params: 
+
+Build: 
+- parition (optional): parition dataset kmeans tree
+- scoring: search query in a parition(or the whole set)
+- rescoring (optional): take best k' result to perform exact search
+
+scann.scann_ops_pybind.builder(normalized_dataset, 10, metrics).tree(
+    num_leaves, num_leaves_to_search, training_sample_size).score_ah(
+      dimensions_per_block=2, anisotropic_quantization_threshold).reorder().build()
+      - num_leaves: ~= sqrt(datapoints)
+      - AH: dimensions_per_block=2
+
+Search: searcher.search_batched(queries, params); searcher.search(query, params)
+- leaves_to_search: how many nodes we search and load the exact search vectors from 
+- final_num_neighbors: number of neighbors returned
