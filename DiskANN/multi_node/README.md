@@ -1,6 +1,7 @@
 ### Multi-Node Option
 
 Extra Options
+
     --split true
         split the data into shards if memory threshold does not permit one-shot index building
     --shard_num i
